@@ -1,0 +1,8 @@
+.idea
+app.iml
+target
+data
+.classpath
+.factorypath
+.project
+.settings

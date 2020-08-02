@@ -1,0 +1,48 @@
+version: '3.7'
+services:
+  app:
+    container_name: beer-app
+    build:
+      context: ${PWD}/beer-backend
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://beer-db:5432@db/beerdb
+      - spring.datasource.url=jdbc:postgresql://beer-db:5432/beerdb
+      - spring.datasource.username=postgres
+      - spring.datasource.password=password
+      - spring.jpa.hibernate.ddl-auto=none
+    ports:
+      - 8080:8080
+    links:
+      - db
+    depends_on:
+      - db
+
+  db:
+    container_name: beer-db
+    image: postgres:11
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: beerdb
+    volumes:
+      - ./beer-backend/data/postgres:/var/lib/postgresql/data
+      
+  frontend:
+    container_name: beer-frontend
+    build:
+      context: ${PWD}/beer-frontend
+      dockerfile: Dockerfile
+    volumes:
+      - '${PWD}/beer-frontend:/app'
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - BACKEND_URL=http://beer-app:8080
+      - PORT=3000
+    links:
+      - app
