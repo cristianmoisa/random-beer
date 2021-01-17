@@ -36,8 +36,6 @@ services:
     build:
       context: ${PWD}/beer-frontend
       dockerfile: Dockerfile
-    volumes:
-      - '${PWD}/beer-frontend:/app'
     ports:
       - '3000:3000'
     environment:
