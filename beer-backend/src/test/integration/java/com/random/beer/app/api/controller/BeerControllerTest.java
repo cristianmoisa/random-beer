@@ -1,5 +1,6 @@
-package com.random.beer.app.controller;
+package com.random.beer.app.api.controller;
 
+import com.random.beer.app.controller.BeerController;
 import com.random.beer.app.model.Beer;
 import com.random.beer.app.service.BeerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +28,6 @@ import static org.hamcrest.CoreMatchers.is;
 
 
 @WebMvcTest(controllers = BeerController.class)
-@ActiveProfiles("test")
 public class BeerControllerTest {
 
   @Autowired

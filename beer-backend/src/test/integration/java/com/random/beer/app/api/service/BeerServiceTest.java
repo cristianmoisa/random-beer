@@ -1,15 +1,13 @@
-package service;
+package com.random.beer.app.api.service;
 
 import static org.mockito.BDDMockito.given;
 
-import com.random.beer.app.exception.BeerExistsException;
 import com.random.beer.app.model.Beer;
 import com.random.beer.app.model.BeerDTO;
 import com.random.beer.app.repository.BeerRepository;
 import com.random.beer.app.service.BeerService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +18,6 @@ import org.modelmapper.ModelMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BeerServiceTest {
