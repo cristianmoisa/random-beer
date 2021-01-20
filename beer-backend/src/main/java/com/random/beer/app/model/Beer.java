@@ -35,4 +35,7 @@ public class Beer {
   @Column()
   private String beerImageUrl;
 
+  @Column(nullable = false)
+  private boolean isDeleted;
+
 }

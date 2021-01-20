@@ -1,7 +1,8 @@
 package com.random.beer.app.controller;
 
-import com.random.beer.app.model.Beer;
+import com.random.beer.app.model.BeerDTO;
 import com.random.beer.app.service.BeerService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class BeerController {
 
-  private BeerService beerService;
+  private final BeerService beerService;
 
   @Autowired
   public BeerController(BeerService beerService) {
@@ -32,51 +33,40 @@ public class BeerController {
   }
 
   @GetMapping()
-  public Iterable<Beer> getAllBeers() {
+  public List<BeerDTO> getAllBeers() {
+    log.info("Request to get all beers");
     return beerService.findAllBeers();
   }
 
+  @GetMapping("/random")
+  public BeerDTO getRandomBeer() {
+    log.info("Request to get a random beer.");
+    return beerService.getRandomBeer();
+  }
+
   @GetMapping("/{id}")
-  public ResponseEntity<Beer> getBeerById(@PathVariable Long id) {
+  public ResponseEntity<BeerDTO> getBeerById(@PathVariable Long id) {
     log.info("Request to get beer with id {}", id);
-    return beerService.findBeerById(id)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
+    return beerService.findBeerById(id);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Beer createBeer(@RequestBody @Validated Beer beer) {
-    log.info("Request to create beer: {}", beer);
-    return beerService.createBeer(beer);
+  public BeerDTO createBeer(@RequestBody @Validated BeerDTO beerDTO) {
+    log.info("Request to create beer: {}", beerDTO);
+    return beerService.createBeer(beerDTO);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Beer> updateBeer(@PathVariable Long id, @RequestBody Beer beer) {
+  public ResponseEntity<BeerDTO> updateBeer(@PathVariable Long id, @RequestBody BeerDTO beerDTO) {
     log.info("Request to update beer with id {}", id);
-    return beerService.findBeerById(id)
-        .map(beerObj -> {
-          beerObj.setId(id);
-          return ResponseEntity.ok(beerService.updateBeer(beerObj));
-        })
-        .orElseGet(() -> ResponseEntity.notFound().build());
+    return beerService.updateBeer(id, beerDTO);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Beer> deleteBeer(@PathVariable Long id) {
+  public ResponseEntity deleteBeer(@PathVariable Long id) {
     log.info("Request to delete beer with id {}", id);
-    return beerService.findBeerById(id)
-        .map(beer -> {
-          beerService.deleteBeerById(id);
-          return ResponseEntity.ok(beer);
-        })
-        .orElseGet(() -> ResponseEntity.notFound().build());
-  }
-
-  @GetMapping("/random")
-  public Beer getRandomBeer() {
-    log.info("Request to get a random beer.");
-    return beerService.getRandomBeer();
+    return beerService.deleteBeerById(id);
   }
 
 }
